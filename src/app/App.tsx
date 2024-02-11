@@ -1,11 +1,8 @@
 
 import styled from "styled-components";
 import { Button } from 'components/Button';
-import fib from './fib.svg';
-import { Fibonachi } from 'components/Fibonachi';
 import { Dial } from 'components/Dial';
 import { Title } from 'components/Title';
-import { Phase } from 'components/Phase';
 import { useEffect, useState } from 'react';
 import { ScaleContext } from './ScaleContext';
 import { PhasesBlock } from "components/PhasesBlock";
