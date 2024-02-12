@@ -86,7 +86,7 @@ Error generating stack: `+o.message+`
   /* 85% { transform: rotate(calc(720deg + 710deg)); } */
   87% { transform: rotate(calc(720deg + 716deg)); }
   /* 97% { transform: rotate(717deg); }*/
-  94% { transform: rotate(calc(720deg +722deg)); } 
+  94% { transform: rotate(calc(720deg + 722deg)); } 
   100% { transform: rotate(calc(720deg + 720deg)); }
 `,Ah=Te.div`
   position: relative;
