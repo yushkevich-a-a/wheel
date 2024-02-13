@@ -1,6 +1,6 @@
 import { ScaleContext } from 'app/ScaleContext'
 import { useContext } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 // const Wrapper = styled.div<{$scale: number}>`
 //   position: absolute;
@@ -8,10 +8,11 @@ import styled from 'styled-components'
 //   left: 0;
 //   padding: 60px 75px;
 //   `;
-const StyledButton = styled.div<{$scale: number}>` 
+const StyledButton = styled.div<{$disactive: boolean, $scale: number}>` 
   transform: scale(${props => props.$scale});
   /* margin: ${props => props.$scale * 60 +'px'} ${props => props.$scale * 75 +'px'}; */
   /* margin: 5% 4%; */
+  ${props => props.$disactive && css`opacity: 0.5;`}
   position: absolute;
   bottom: 4%;
   left: 5%;
@@ -29,11 +30,11 @@ const StyledButton = styled.div<{$scale: number}>`
   }
 `
 
-export const Button = ({click}: {click: () => void}) => {
+export const Button = ({disactive, click}: {disactive: boolean, click: () => void}) => {
   const scale = useContext(ScaleContext);
   return (
     // <Wrapper $scale={scale} >
-      <StyledButton $scale={scale} onClick={click}>Кнопка</StyledButton>
+      <StyledButton $disactive={disactive} $scale={scale} onClick={click}>Кнопка</StyledButton>
     // </Wrapper>
   )
 }

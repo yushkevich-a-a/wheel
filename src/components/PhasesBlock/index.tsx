@@ -28,13 +28,13 @@ const BottomBlock = styled.div`
     align-items: center;
 `
 
-export const PhasesBlock = () => {
+export const PhasesBlock = ({enableTrigger}: {enableTrigger: boolean}) => {
     const scale = useContext(ScaleContext);
   return (
     <>
         <CenterBlocks $scale={scale}>
             <Phase title={'Фаза №1'} subTitle={'Верхнеуровневый план'} />
-            <Phase title={'Фаза №2'} subTitle={'Есть слона по частям'}/>
+            <Phase title={'Фаза №2'} subTitle={'Есть слона по частям'} enableTrigger={enableTrigger}/>
         </CenterBlocks>
         <BottomBlock >
             <Phase title={'Фаза №3'} subTitle={'Профит'} />

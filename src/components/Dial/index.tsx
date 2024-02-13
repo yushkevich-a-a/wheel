@@ -29,12 +29,12 @@ const Container = styled.div<{$scale: number}>`
   align-items: center;
 `;
 
-export const Dial = ({ start, disableAnimate }: {start: boolean, disableAnimate: () => void}) => { 
+export const Dial = ({ start, disableAnimate, enableColor }: {start: boolean, disableAnimate: () => void, enableColor: () => void}) => { 
   const scale = useContext(ScaleContext);
   return (
     <Wrapper>
       <Container $scale={scale}>
-        <Arrow start={start} disableAnimate={disableAnimate}/>
+        <Arrow start={start} disableAnimate={disableAnimate} enableColor={enableColor}/>
       </Container>
     </Wrapper>
   )

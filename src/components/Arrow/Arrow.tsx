@@ -9,10 +9,7 @@ const bounceInRight = keyframes`
   45% { transform: rotate(calc(720deg + 750deg)); }
   60% { transform: rotate(calc(720deg + 705deg)); }
   75% { transform: rotate(calc(720deg + 727deg)); }
-  /* 85% { transform: rotate(calc(720deg + 710deg)); } */
-  87% { transform: rotate(calc(720deg + 716deg)); }
-  /* 97% { transform: rotate(717deg); }*/
-  94% { transform: rotate(calc(720deg + 722deg)); } 
+  90% { transform: rotate(calc(720deg + 716deg)); } 
   100% { transform: rotate(calc(720deg + 720deg)); }
 `;
 
@@ -37,7 +34,7 @@ const Container = styled.div<{$start: boolean, $scale: number}>`
     background-color: #358879;
   }
 `;
-export const Arrow = ({start, disableAnimate} : {start: boolean, disableAnimate : () => void}) => {
+export const Arrow = ({start, disableAnimate, enableColor } : {start: boolean, disableAnimate : () => void, enableColor: () => void}) => {
   const refEl = useRef<HTMLDivElement>(null)
   const scale = useContext(ScaleContext);
   useEffect(() => {
@@ -45,9 +42,16 @@ export const Arrow = ({start, disableAnimate} : {start: boolean, disableAnimate 
       return
     }
     const funcReset = () => disableAnimate();
+
+    const funcGlitch = () => {
+      setTimeout(enableColor, 2000);
+    };
+
     refEl.current.addEventListener('animationend', funcReset, false);
+    refEl.current.addEventListener('animationstart', funcGlitch, false);
     return () => {
       refEl.current && refEl.current.removeEventListener('animationend', funcReset, false)
+      refEl.current && refEl.current.removeEventListener('animationstart', funcGlitch, false)
     };
   }, [])
   return (

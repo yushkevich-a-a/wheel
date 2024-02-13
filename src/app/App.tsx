@@ -31,6 +31,7 @@ const Container = styled.div<{$scale: number}>`
 function App() {
   const [ startAnim, setStartAnim ] = useState<boolean>(false);
   const [ scale, setScale ] = useState<number>(1);
+  const [ enableColor, setEnableColor ] = useState<boolean>(false);
 
   useEffect(() => {
     const resizeCompute = () => {
@@ -56,7 +57,11 @@ function App() {
   }
 
   const handleStopAnimate = () => {
-    setStartAnim(false) ;
+    setStartAnim(false)
+  }
+  const handleStartColor = () => {
+    setEnableColor(true);
+    setTimeout( () => setEnableColor(false),2000);
   }
 
   return (
@@ -65,9 +70,9 @@ function App() {
         <Container $scale={scale}>
           <Title/>
           {/* <Fibonachi/> */}
-          <PhasesBlock />
-          <Dial start={startAnim} disableAnimate={handleStopAnimate}/>
-          <Button click={handleStartClick}/>
+          <PhasesBlock enableTrigger={enableColor} />
+          <Dial start={startAnim} disableAnimate={handleStopAnimate} enableColor={handleStartColor}/>
+          <Button disactive={startAnim} click={handleStartClick}/>
         </Container>
       </ScaleContext.Provider>
     </Wrapper>
