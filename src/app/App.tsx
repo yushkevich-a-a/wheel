@@ -6,6 +6,7 @@ import { Title } from 'components/Title';
 import { useEffect, useState } from 'react';
 import { ScaleContext } from './ScaleContext';
 import { PhasesBlock } from "components/PhasesBlock";
+import fib from './fib.svg'
 
 
 
@@ -26,6 +27,10 @@ const Container = styled.div<{$scale: number}>`
   left: 0;
   width: 100%;
   height: 100vh;
+  background-image: url(${fib});
+  background-size: auto;
+  background-position: center;
+  background-repeat: no-repeat;  
 `;
 
 function App() {

@@ -1,60 +1,127 @@
 import { ScaleContext } from 'app/ScaleContext';
 import arrow from 'components/Arrow/arrow.svg';
-import { useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import styled, { css, keyframes } from 'styled-components';
 
+// const Wrapper = styled.div`
+//   position: absolute;
+//   top: 0;
+//   right: 0;
+//   bottom: 0;
+//   left: 0;
+//   border-radius: 50%;
+//   overflow: hidden;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
-const bounceInRight = keyframes`
-  0%  { transform: rotate(0deg); }
-  45% { transform: rotate(calc(720deg + 750deg)); }
-  60% { transform: rotate(calc(720deg + 705deg)); }
-  75% { transform: rotate(calc(720deg + 727deg)); }
-  90% { transform: rotate(calc(720deg + 716deg)); } 
-  100% { transform: rotate(calc(720deg + 720deg)); }
-`;
-
-const Container = styled.div<{$start: boolean, $scale: number}>`
+const Container = styled.div<{$scale: number}>`
   position: relative;
   width: 600px;
-  height: 687px;
-  background-image: url(${arrow});
-  background-size: 327px 280px;
-  background-position: center right;
-  background-repeat: no-repeat;  
-  ${props => props.$start && css`animation:  3s ${bounceInRight} ease-in-out;`}
+  height: 600px;
+  overflow: hidden;
+  border-radius: 50%;
+  transition: transform 3s ease;
+`;
+
+const Pie = styled.div`
+  position: relative;
+  width: 600px;
+  height: 600px;
+  transform: rotate(-91deg);
   display: flex;
   justify-content: center;
   align-items: center;
   &::after{
     content: '';
     display: block;
+    position: relative;
     width: 54px;
     height: 54px;
     border-radius: 50%;
     background-color: #358879;
-  }
-`;
+  }  
+  &::before{
+    content: '';
+    position: absolute;
+    display: block;
+    width: 325px;
+    height: 42px;
+    background-image: url(${arrow});
+    background-size: contain;
+    background-repeat: no-repeat;  
+    right: 0;
+  }`;
+
 export const Arrow = ({start, disableAnimate, enableColor } : {start: boolean, disableAnimate : () => void, enableColor: () => void}) => {
-  const refEl = useRef<HTMLDivElement>(null)
+  const [ offset, setOffset ] = useState<number>(100);
+  const [ rotate, setRotate ] = useState<number>(90);
   const scale = useContext(ScaleContext);
+  const ref=useRef<HTMLDivElement>(null);
+
+  const stopTransition = () => {
+    disableAnimate();
+    enableColor();
+    setRotate(90);
+  }
+
+  const resetOffsetShadow = () => {
+    const timer = setTimeout(resetOffsetShadow, 400);
+    setOffset(state => {
+      if (state < 100) {
+      return state + 1;
+      } 
+      clearTimeout(timer);
+      return state;
+    })
+  }
+
+  const setOffsetShadow = () => {
+    setTimeout(resetOffsetShadow, 1500);
+    const timer = setTimeout(setOffsetShadow, 40);
+    setOffset(state => {
+      if (state > 60) {
+      return state - 3;
+      } 
+      clearTimeout(timer);
+      return state;
+    })
+
+  }
+
   useEffect(() => {
-    if (!refEl.current) {
-      return
+    if (!ref.current) {
+      return;
     }
-    const funcReset = () => disableAnimate();
+    ref.current.addEventListener('transitionend', stopTransition);
+    ref.current.addEventListener('transitionstart', setOffsetShadow);
 
-    const funcGlitch = () => {
-      setTimeout(enableColor, 2000);
-    };
-
-    refEl.current.addEventListener('animationend', funcReset, false);
-    refEl.current.addEventListener('animationstart', funcGlitch, false);
     return () => {
-      refEl.current && refEl.current.removeEventListener('animationend', funcReset, false)
-      refEl.current && refEl.current.removeEventListener('animationstart', funcGlitch, false)
-    };
-  }, [])
+      ref.current && ref.current.removeEventListener('transitionend', stopTransition);
+      ref.current && ref.current.removeEventListener('transitionstart', setOffsetShadow);
+    }
+  },[]);
+
+
+  useEffect(() => {
+    if(start) {
+      setRotate(810);
+      return;
+    }
+  },[start]);
+
   return (
-    <Container ref={refEl} $start={start} $scale={scale} id='arrow'/>
+    <Container 
+      ref={ref}
+      $scale={scale}
+      style={{
+        "background": `conic-gradient(transparent ${offset + '%'}, rgb(38 212 250 / 100%) ${offset + 70 + '%'})`,
+        "transition": `${start && "transform 3s"}`,
+        "transform": `rotate(${rotate}deg)`,
+      }}
+    >
+        <Pie />
+    </Container>
   )
 }
