@@ -1,5 +1,3 @@
-import { ScaleContext } from 'app/ScaleContext';
-import { useContext, useEffect, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 
 const bgMain = keyframes`
@@ -27,8 +25,7 @@ const bgSub = keyframes`
   99% {color: #FFFFFF;}
 `;
 
-const Container = styled.div<{ $scale: number }>`
-     transform: scale(${props => props.$scale}) ;
+const Container = styled.div`
     max-width: 340px;
     display: flex;
     flex-direction: column;
@@ -59,9 +56,8 @@ const STit = styled.div<{$enable: boolean}>`
 `
 
 export const Phase = ({title, subTitle, enableTrigger}: {title:string, subTitle:string, enableTrigger?:boolean}) => {
-    const scale = useContext(ScaleContext);
     return (
-    <Container $scale={scale}>
+    <Container>
         <Tit $enable={!!enableTrigger}>{title}</Tit>
         <STit $enable={!!enableTrigger}>{subTitle}</STit>
     </Container>

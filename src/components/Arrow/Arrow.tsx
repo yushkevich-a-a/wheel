@@ -1,22 +1,9 @@
-import { ScaleContext } from 'app/ScaleContext';
+
 import arrow from 'components/Arrow/arrow.svg';
 import { useContext, useEffect, useRef, useState } from 'react'
 import styled, { css, keyframes } from 'styled-components';
 
-// const Wrapper = styled.div`
-//   position: absolute;
-//   top: 0;
-//   right: 0;
-//   bottom: 0;
-//   left: 0;
-//   border-radius: 50%;
-//   overflow: hidden;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// `;
-
-const Container = styled.div<{$scale: number}>`
+const Container = styled.div`
   position: relative;
   width: 600px;
   height: 600px;
@@ -57,7 +44,6 @@ const Pie = styled.div`
 export const Arrow = ({start, disableAnimate, enableColor } : {start: boolean, disableAnimate : () => void, enableColor: () => void}) => {
   const [ offset, setOffset ] = useState<number>(100);
   const [ rotate, setRotate ] = useState<number>(90);
-  const scale = useContext(ScaleContext);
   const ref=useRef<HTMLDivElement>(null);
 
   const stopTransition = () => {
@@ -114,7 +100,6 @@ export const Arrow = ({start, disableAnimate, enableColor } : {start: boolean, d
   return (
     <Container 
       ref={ref}
-      $scale={scale}
       style={{
         "background": `conic-gradient(transparent ${offset + '%'}, rgb(38 212 250 / 100%) ${offset + 70 + '%'})`,
         "transition": `${start && "transform 3s"}`,

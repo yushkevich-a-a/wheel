@@ -4,11 +4,10 @@ import { Button } from 'components/Button';
 import { Dial } from 'components/Dial';
 import { Title } from 'components/Title';
 import { useEffect, useState } from 'react';
-import { ScaleContext } from './ScaleContext';
-import { PhasesBlock } from "components/PhasesBlock";
 import fib from './fib.svg'
-
-
+import { Phase } from "components/Phase";
+import { Footer } from "components/Footer";
+import { Body } from "components/Body";
 
 const Wrapper = styled.div`
 position: relative;
@@ -17,9 +16,7 @@ position: relative;
   background: #000;
   overflow: hidden;
 `;
-const Container = styled.div<{$scale: number}>`
-  /* transform: scale(${props => props.$scale}); */
-  /* transform: scale(0.8); */
+const Container = styled.div`
   position: absolute;
   top: 0;
   right: 0;
@@ -31,28 +28,20 @@ const Container = styled.div<{$scale: number}>`
   background-size: auto;
   background-position: center;
   background-repeat: no-repeat;  
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
+
+const FlexBlock = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+`
 
 function App() {
   const [ startAnim, setStartAnim ] = useState<boolean>(false);
-  const [ scale, setScale ] = useState<number>(1);
   const [ enableColor, setEnableColor ] = useState<boolean>(false);
-
-  useEffect(() => {
-    const resizeCompute = () => {
-      const width= window.innerWidth;
-      const height = window.innerHeight;
-      const scaleX = width / 1920;
-      const scaleY = height / 1080;
-      const arr = [scaleX, scaleY];
-      setScale(Math.min(...arr));
-    }
-    resizeCompute();
-    document.addEventListener('resize', resizeCompute);
-    return () => {
-      document.removeEventListener('resize', resizeCompute);
-    }
-  },[])
 
   const handleStartClick = () => {
     if(startAnim) {
@@ -71,15 +60,20 @@ function App() {
 
   return (
     <Wrapper>
-      <ScaleContext.Provider value={scale}>
-        <Container $scale={scale}>
-          <Title/>
-          {/* <Fibonachi/> */}
-          <PhasesBlock enableTrigger={enableColor} />
-          <Dial start={startAnim} disableAnimate={handleStopAnimate} enableColor={handleStartColor}/>
-          <Button disactive={startAnim} click={handleStartClick}/>
+        <Container>
+          <FlexBlock>
+            <Title/>
+          </FlexBlock>
+          <Body>
+            <Phase title={'Фаза №1'} subTitle={'Верхнеуровневый план'} />
+            <Dial start={startAnim} disableAnimate={handleStopAnimate} enableColor={handleStartColor}/>
+            <Phase title={'Фаза №2'} subTitle={'Есть слона по частям'} enableTrigger={enableColor}/>
+          </Body>
+          <Footer>
+            <Button disactive={startAnim} click={handleStartClick}/>
+            <Phase title={'Фаза №3'} subTitle={'Профит'} />
+          </Footer>
         </Container>
-      </ScaleContext.Provider>
     </Wrapper>
   )
 }
